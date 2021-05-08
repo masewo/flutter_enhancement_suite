@@ -18,7 +18,13 @@ class FileParser(private val file: PsiFile) {
         val problemDescriptionList = mutableListOf<VersionDescription>()
         val packageLines = file.readPackageLines()
         packageLines
-            .map { pair -> mapToVersionDescription(pair) }
+            .mapNotNull { pair ->
+                try {
+                    mapToVersionDescription(pair)
+                } catch (e: GetLatestPackageVersionException) {
+                    null
+                }
+            }
             .forEach { versionDescription ->
                 if (versionDescription.latestVersion != versionDescription.currentVersion) {
                     problemDescriptionList.add(versionDescription)
