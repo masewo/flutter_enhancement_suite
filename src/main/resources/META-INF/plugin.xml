@@ -9,11 +9,6 @@
     <depends>Dart</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <programRunner implementation="de.mariushoefler.flutterenhancementsuite.coverage.FlutterCoverageProgramRunner"/>
-        <coverageEngine implementation="de.mariushoefler.flutterenhancementsuite.coverage.FlutterCoverageEngine"/>
-        <coverageRunner implementation="de.mariushoefler.flutterenhancementsuite.coverage.FlutterCoverageRunner"/>
-        <projectService serviceImplementation="de.mariushoefler.flutterenhancementsuite.coverage.FlutterCoverageAnnotator"/>
-
         <!--        Dart Code Snippets-->
         <defaultLiveTemplates file="/liveTemplates/Dart.xml"/>
 
@@ -29,6 +24,9 @@
         <!--        Pub package auto-complete-->
         <completion.contributor language="yaml"
                                 implementationClass="de.mariushoefler.flutterenhancementsuite.completion.PubspecCompletionContributor"/>
+
+        <!--        Pub package pub.dev linker-->
+        <psi.referenceContributor language="yaml" implementation="de.mariushoefler.flutterenhancementsuite.editor.PackageReferenceContributor"/>
 
         <!--        Gutter Icon Provider-->
         <annotator language="Dart"
@@ -57,6 +55,15 @@
                                     id="PubChangelogProvider"
                                     order="first, before YamlJsonSchemaDocumentationProvider"/>
 
+        <intentionAction order="first">
+            <className>de.mariushoefler.flutterenhancementsuite.intentions.MakePrivateIntention</className>
+            <category>Dart</category>
+        </intentionAction>
+        <intentionAction order="first">
+            <className>de.mariushoefler.flutterenhancementsuite.intentions.MakePublicIntention</className>
+            <category>Dart</category>
+        </intentionAction>
+
         <annotator implementationClass="de.mariushoefler.flutterenhancementsuite.editor.UrlAnnotator"
                    order="first"
                    language="yaml"/>
@@ -78,15 +85,6 @@
                           anchor="before"
                           relative-to-action="NewFromTemplate"/>
         </action>
-        <action id="Flutter.NewBloc"
-                class="de.mariushoefler.flutterenhancementsuite.actions.NewFlutterBlocAction"
-                text="Flutter Bloc"
-                icon="PluginIcons.BlocIcon"
-                description="Create a new Flutter bloc">
-            <add-to-group group-id="NewGroup"
-                          anchor="after"
-                          relative-to-action="Flutter.NewWidget"/>
-        </action>
         <action id="Flutter.ExtractWidgetToFile"
                 class="de.mariushoefler.flutterenhancementsuite.refactoring.ExtractWidgetToFileAction"
                 text="Extract Widget to File">
@@ -95,6 +93,11 @@
                           anchor="after"/>
             <keyboard-shortcut keymap="$default"
                                first-keystroke="ctrl alt E"/>
+        </action>
+        <action id="Flutter.RunPackagesGet"
+                class="de.mariushoefler.flutterenhancementsuite.actions.RunPackagesGetAction"
+                text="Run Pub Get">
+            <add-to-group group-id="ProjectViewPopupMenuModifyGroup" anchor="before" relative-to-action="$Delete"/>
         </action>
     </actions>
 </idea-plugin>
